@@ -1,8 +1,11 @@
+%Quiz 2022-23 Q2 P1
+%
+
 clearvars
 close all
 
 Y = 150.0;         %GPa
-areaSec = 3400.0;  %mm^2
+areaSec = 3100.0;  %mm^2
 
 %Geometry
 nodes = [0, 0;...
@@ -76,24 +79,33 @@ Km = K(freeNodes,freeNodes);
 um = Km\Im;
 u(freeNodes) = um;
 
-desplX = u(1:ndim:end); %displacements in x-directon
-desplY = u(2:ndim:end); %displacements in y-directon
-
-format long e
-format compact
-[desplX, desplY]
+displX = u(1:ndim:end); %displacements in x-directon
+displY = u(2:ndim:end); %displacements in y-directon
 
 %Final lenght of bar e = 7
 e = 7;
 n1 = elem(e,1); n2 = elem(e,2);
-z1 = nodes(n1,:) + [desplX(n1), desplY(n1)]; 
-z2 = nodes(n2,:) + [desplX(n2), desplY(n2)]; 
+z1 = nodes(n1,:) + [displX(n1), displY(n1)]; 
+z2 = nodes(n2,:) + [displX(n2), displY(n2)]; 
 
-finalLengthElem = norm(z2-z1) 
+finalLengthElem = norm(z2-z1); 
 
 %Final position of y component of node 5
 nod = 5;
-finalPositionNod = nodes(nod,2) + desplY(nod) 
+yFinalPositionNod = nodes(nod,2) + displY(nod); 
+ 
+%Print out the solutions
+fprintf('Quiz 2022-23 Q2 P1\n')
+fprintf(['(a) Entry (5,6) of reduced system''s matrix, Km(5,6) = %.4e\n',...
+         '    Hint. The x-displacement of node 3 is: %.6e\n'],...
+         Km(5,6),displX(3))
+fprintf(['(b) The x-displacement of node 4 is: %.4e\n',...
+         '    Hint. The y-displacement of node 2 is: %.4e\n'],...
+         displX(4),displY(2))
+fprintf(['(c) Final lenght of bar 7 after deformation: %.4e\n',...
+         '    Hint. Final poision of the y-component of node 5: %.4e\n'],...
+         finalLengthElem,yFinalPositionNod)
+
 
 
 
